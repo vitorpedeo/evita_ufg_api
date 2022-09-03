@@ -18,7 +18,7 @@ class TeacherRepository
         return $this->model->with('department')->find($id);
     }
 
-    public function findByDepartment(int $departmentId)
+    public function findByDepartmentId(int $departmentId)
     {
         return $this->model->where('department_id', $departmentId)->get();
     }

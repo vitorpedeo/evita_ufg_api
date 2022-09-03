@@ -17,14 +17,4 @@ class DepartmentRepository
     {
         return $this->model->all();
     }
-
-    public function findById(int $id)
-    {
-        return $this->model->find($id);
-    }
-
-    public function findByRegional(string $regional)
-    {
-        return $this->model->where('regional', $regional)->get();
-    }
 }
