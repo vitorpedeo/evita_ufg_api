@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\UserAccountRepository;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -70,7 +71,11 @@ class UserAccountService
                 return response()->json(['error' => 'Invalid email/password'], 401);
             }
 
-            return response()->json($userAccount, 200);
+            return response()->json([
+                'success' => true,
+                'data' => $userAccount,
+                'token' => $userAccount->createToken('auth_token')->plainTextToken,
+            ], 200);
         } catch (\Exception $e) {
             Log::error('Erro ao logar usuário', [
                 'message' => $e->getMessage(),
@@ -80,5 +85,19 @@ class UserAccountService
 
             return response()->json(['error' => $e->getMessage()], 500);
         }
+    }
+
+    public function logout()
+    {
+        $currentUser = Auth::user();
+
+        $currentUser->currentAccessToken()->delete();
+
+        return response()->json(['success' => true, 'message' => 'Successfully logout'], 200);
+    }
+
+    public function invalidToken()
+    {
+        return response()->json(['success' => false, 'error' => 'Invalid token'], 401);
     }
 }

@@ -32,4 +32,14 @@ class UserAccountController extends Controller
             'password' => $request->input('password'),
         ]);
     }
+
+    public function logout()
+    {
+        return $this->service->logout();
+    }
+
+    public function invalidToken()
+    {
+        return $this->service->invalidToken();
+    }
 }

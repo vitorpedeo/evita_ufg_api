@@ -17,20 +17,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::prefix('auth')->group(function() {
-    Route::post('/register', [UserAccountController::class, 'register']);
-    Route::post('/login', [UserAccountController::class, 'login']);
+    Route::post('/register', [UserAccountController::class, 'register'])->name('auth.register');
+    Route::post('/login', [UserAccountController::class, 'login'])->name('auth.login');
 });
 
-Route::prefix('department')->group(function () {
-    Route::get('/', [DepartmentController::class, 'getAll']);
-});
+/* Rota para lidar com os erros causados pelos tokens inválidos */
+Route::get('/login', [UserAccountController::class, 'invalidToken'])->name('login');
 
-Route::prefix('teacher')->group(function () {
-    Route::get('/{id}', [TeacherController::class, 'getById']);
-    Route::get('/department/{id}', [TeacherController::class, 'getByDepartmentId']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix('department')->group(function () {
+        Route::get('/', [DepartmentController::class, 'getAll'])->name('department.getAll');
+    });
+
+    Route::prefix('teacher')->group(function () {
+        Route::get('/{id}', [TeacherController::class, 'getById'])->name('teacher.getById');
+        Route::get('/department/{id}', [TeacherController::class, 'getByDepartmentId'])->name('teacher.getByDepartmentId');
+    });
+
+    Route::get('/logout', [UserAccountController::class, 'logout'])->name('auth.logout');
 });
