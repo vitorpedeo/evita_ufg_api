@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\DepartmentRepository;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class DepartmentService
@@ -19,16 +20,17 @@ class DepartmentService
         try {
             $departments = $this->repository->findAll();
 
-            // TODO: adicionar o nome do usuário no registro dos logs
-            Log::info('O usuário X buscou todos os departamentos');
+            Log::info('Busca bem sucedida pelos departamentos', [
+                'user' => Auth::user(),
+            ]);
 
             return response()->json($departments, 200);
         } catch (\Exception $e) {
-            // TODO: adicionar o nome do usuário no registro dos logs
             Log::error('Erro ao buscar todos os departamentos', [
                 'message' => $e->getMessage(),
                 'line' => $e->getLine(),
                 'file' => $e->getFile(),
+                'user' => Auth::user(),
             ]);
 
             return response()->json(['error' => $e->getMessage()], 500);

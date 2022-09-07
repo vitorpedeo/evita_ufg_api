@@ -37,7 +37,7 @@ class UserAccountService
 
             return response()->json($userAccount, 201);
         } catch (\Exception $e) {
-            Log::error('Erro ao registrar usuário', [
+            Log::error('Erro ao tentar registrar um novo usuário', [
                 'message' => $e->getMessage(),
                 'line' => $e->getLine(),
                 'file' => $e->getFile(),
