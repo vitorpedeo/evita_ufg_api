@@ -31,4 +31,9 @@ class UserAccount extends Authenticatable
         'created_at',
         'updated_at',
     ];
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'user_account_id', 'id');
+    }
 }

@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\UserAccountController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,6 +33,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('teacher')->group(function () {
         Route::get('/{id}', [TeacherController::class, 'getById'])->name('teacher.getById');
         Route::get('/department/{id}', [TeacherController::class, 'getByDepartmentId'])->name('teacher.getByDepartmentId');
+    });
+
+    Route::prefix('comment')->group(function () {
+        Route::post('/', [CommentController::class, 'save'])->name('comment.save');
+        Route::patch('/{id}', [CommentController::class, 'update'])->name('comment.update');
+        Route::delete('/{id}', [CommentController::class, 'delete'])->name('comment.delete');
     });
 
     Route::get('/logout', [UserAccountController::class, 'logout'])->name('auth.logout');

@@ -15,7 +15,7 @@ class TeacherRepository
 
     public function findById(int $id)
     {
-        return $this->model->with('department')->find($id);
+        return $this->model->with(['department', 'comments.userAccount'])->find($id);
     }
 
     public function findByDepartmentId(int $departmentId)
