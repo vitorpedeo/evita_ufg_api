@@ -29,7 +29,7 @@ class CommentService
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
+            return response()->json(['success' => false, 'message' => $validator->errors()], 400);
         }
 
         try {
@@ -46,7 +46,7 @@ class CommentService
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['error' => 'Erro ao salvar comentário'], 500);
+                return response()->json(['success' => false, 'message' => 'Erro ao salvar comentário'], 500);
             }
 
             $teacher = $this->teacherRepository->findById($validData['teacher_id']);
@@ -57,7 +57,7 @@ class CommentService
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['error' => 'Erro ao buscar professor'], 500);
+                return response()->json(['success' => false, 'message' => 'Erro ao buscar professor'], 500);
             }
 
             $teacher->rating = $this->commentRepository->findAverageByTeacherId($teacher->id);
@@ -67,7 +67,7 @@ class CommentService
 
             DB::commit();
 
-            return response()->json($comment, 201);
+            return response()->json(['success' => true, 'data' => $comment], 201);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Erro ao salvar comentário', [
@@ -77,7 +77,7 @@ class CommentService
                 'user' => Auth::user(),
             ]);
 
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 
@@ -89,7 +89,7 @@ class CommentService
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
+            return response()->json(['success' => false, 'message' => $validator->errors()], 400);
         }
 
         try {
@@ -105,7 +105,7 @@ class CommentService
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['error' => 'Erro ao buscar comentário'], 500);
+                return response()->json(['success' => false, 'message' => 'Erro ao buscar comentário'], 500);
             }
 
             if ($comment->user_account_id !== Auth::user()->id) {
@@ -114,7 +114,7 @@ class CommentService
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['error' => 'Usuário não autorizado a atualizar comentário'], 401);
+                return response()->json(['success' => false, 'message' => 'Usuário não autorizado a atualizar comentário'], 401);
             }
 
             $comment->content = $validData['content'];
@@ -130,7 +130,7 @@ class CommentService
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['error' => 'Erro ao buscar professor'], 500);
+                return response()->json(['success' => false, 'message' => 'Erro ao buscar professor'], 500);
             }
 
             $teacher->rating = $this->commentRepository->findAverageByTeacherId($teacher->id);
@@ -139,7 +139,7 @@ class CommentService
 
             DB::commit();
 
-            return response()->json($comment, 201);
+            return response()->json(['success' => true, 'data' => $comment], 201);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Erro ao atualizar comentário', [
@@ -149,7 +149,7 @@ class CommentService
                 'user' => Auth::user(),
             ]);
 
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 
@@ -166,7 +166,7 @@ class CommentService
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['error' => 'Erro ao buscar comentário'], 500);
+                return response()->json(['success' => false, 'message' => 'Erro ao buscar comentário'], 500);
             }
 
             if ($comment->user_account_id !== Auth::user()->id) {
@@ -175,7 +175,7 @@ class CommentService
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['error' => 'Usuário não autorizado a deletar comentário'], 401);
+                return response()->json(['success' => false, 'message' => 'Usuário não autorizado a deletar comentário'], 401);
             }
 
             $this->commentRepository->delete($commentId);
@@ -188,7 +188,7 @@ class CommentService
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['error' => 'Erro ao buscar professor'], 500);
+                return response()->json(['success' => false, 'message' => 'Erro ao buscar professor'], 500);
             }
 
             $teacher->rating = $this->commentRepository->findAverageByTeacherId($teacher->id) ?? 0;
@@ -211,7 +211,7 @@ class CommentService
                 'user' => Auth::user(),
             ]);
 
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 }

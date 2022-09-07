@@ -24,7 +24,7 @@ class DepartmentService
                 'user' => Auth::user(),
             ]);
 
-            return response()->json($departments, 200);
+            return response()->json(['success' => true, 'data' => $departments], 200);
         } catch (\Exception $e) {
             Log::error('Erro ao buscar todos os departamentos', [
                 'message' => $e->getMessage(),
@@ -33,7 +33,7 @@ class DepartmentService
                 'user' => Auth::user(),
             ]);
 
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 }

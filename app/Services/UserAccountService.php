@@ -26,7 +26,7 @@ class UserAccountService
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
+            return response()->json(['success' => false, 'message' => $validator->errors()], 400);
         }
 
         try {
@@ -35,7 +35,7 @@ class UserAccountService
 
             $userAccount = $this->repository->create($validData);
 
-            return response()->json($userAccount, 201);
+            return response()->json(['success' => true, 'data' => $userAccount], 201);
         } catch (\Exception $e) {
             Log::error('Erro ao tentar registrar um novo usuário', [
                 'message' => $e->getMessage(),
@@ -43,7 +43,7 @@ class UserAccountService
                 'file' => $e->getFile(),
             ]);
 
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 
@@ -55,7 +55,7 @@ class UserAccountService
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
+            return response()->json(['success' => false, 'message' => $validator->errors()], 400);
         }
 
         try {
@@ -64,11 +64,11 @@ class UserAccountService
             $userAccount = $this->repository->findByEmail($validData['email']);
 
             if (!$userAccount) {
-                return response()->json(['error' => 'Invalid email/password'], 401);
+                return response()->json(['success' => false, 'message' => 'Invalid email/password'], 401);
             }
 
             if (!Hash::check($validData['password'], $userAccount->password)) {
-                return response()->json(['error' => 'Invalid email/password'], 401);
+                return response()->json(['success' => false, 'message' => 'Invalid email/password'], 401);
             }
 
             return response()->json([
@@ -83,7 +83,7 @@ class UserAccountService
                 'file' => $e->getFile(),
             ]);
 
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 
@@ -98,6 +98,6 @@ class UserAccountService
 
     public function invalidToken()
     {
-        return response()->json(['success' => false, 'error' => 'Invalid token'], 401);
+        return response()->json(['success' => false, 'message' => 'Invalid token'], 401);
     }
 }

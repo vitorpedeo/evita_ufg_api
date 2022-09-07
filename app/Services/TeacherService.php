@@ -23,7 +23,7 @@ class TeacherService
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => 'Teacher not found'], 404);
+            return response()->json(['success' => false, 'message' => 'Teacher not found'], 404);
         }
 
         try {
@@ -34,7 +34,7 @@ class TeacherService
                 'teacher' => $teacher,
             ]);
 
-            return response()->json($teacher, 200);
+            return response()->json(['success' => true, 'data' => $teacher], 200);
         } catch (\Exception $e) {
             Log::error('Erro ao buscar o professor', [
                 'message' => $e->getMessage(),
@@ -44,7 +44,7 @@ class TeacherService
                 'teacher' => $teacher,
             ]);
 
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 
@@ -55,7 +55,7 @@ class TeacherService
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => 'Invalid department'], 400);
+            return response()->json(['success' => false, 'message' => 'Invalid department'], 400);
         }
 
         try {
@@ -66,7 +66,7 @@ class TeacherService
                 'department' => $departmentId,
             ]);
 
-            return response()->json($teachers, 200);
+            return response()->json(['success' => true, 'data' => $teachers], 200);
         } catch (\Exception $e) {
             // TODO: adicionar o nome do usuário no registro dos logs
             Log::error('Erro ao buscar professores de um departamento', [
@@ -77,7 +77,7 @@ class TeacherService
                 'department' => $departmentId,
             ]);
 
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 }
