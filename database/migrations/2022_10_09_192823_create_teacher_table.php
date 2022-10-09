@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('teacher', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->decimal('rating')->default(0);
             $table->integer('evaluations')->default(0);
             $table->foreignId('department_id')->constrained('department');
