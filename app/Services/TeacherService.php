@@ -29,14 +29,14 @@ class TeacherService
         try {
             $teacher = $this->repository->findById($id);
 
-            Log::info('Busca bem sucedida por um professor', [
+            Log::info('Successfully found teacher', [
                 'user' => Auth::user(),
                 'teacher' => $teacher,
             ]);
 
             return response()->json(['success' => true, 'data' => $teacher], 200);
         } catch (\Exception $e) {
-            Log::error('Erro ao buscar o professor', [
+            Log::error('Failed to find teacher', [
                 'message' => $e->getMessage(),
                 'line' => $e->getLine(),
                 'file' => $e->getFile(),
@@ -61,15 +61,14 @@ class TeacherService
         try {
             $teachers = $this->repository->findByDepartmentId($departmentId);
 
-            Log::info('Busca bem sucedida por professores de um departamento', [
+            Log::info('Successfully found teachers from department', [
                 'user' => Auth::user(),
                 'department' => $departmentId,
             ]);
 
             return response()->json(['success' => true, 'data' => $teachers], 200);
         } catch (\Exception $e) {
-            // TODO: adicionar o nome do usuário no registro dos logs
-            Log::error('Erro ao buscar professores de um departamento', [
+            Log::error('Failed to find teachers from department', [
                 'message' => $e->getMessage(),
                 'line' => $e->getLine(),
                 'file' => $e->getFile(),

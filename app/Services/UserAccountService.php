@@ -37,7 +37,7 @@ class UserAccountService
 
             return response()->json(['success' => true, 'data' => $userAccount], 201);
         } catch (\Exception $e) {
-            Log::error('Erro ao tentar registrar um novo usuário', [
+            Log::error('Failed to register new user', [
                 'message' => $e->getMessage(),
                 'line' => $e->getLine(),
                 'file' => $e->getFile(),
@@ -77,7 +77,7 @@ class UserAccountService
                 'token' => $userAccount->createToken('auth_token')->plainTextToken,
             ], 200);
         } catch (\Exception $e) {
-            Log::error('Erro ao logar usuário', [
+            Log::error('Failed to login', [
                 'message' => $e->getMessage(),
                 'line' => $e->getLine(),
                 'file' => $e->getFile(),

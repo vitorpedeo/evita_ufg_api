@@ -42,22 +42,22 @@ class CommentService
 
             if (!$comment) {
                 DB::rollBack();
-                Log::error('Erro ao salvar comentário', [
+                Log::error('Failed to save comment', [
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['success' => false, 'message' => 'Erro ao salvar comentário'], 500);
+                return response()->json(['success' => false, 'message' => 'Failed to save comment'], 500);
             }
 
             $teacher = $this->teacherRepository->findById($validData['teacher_id']);
 
             if (!$teacher) {
                 DB::rollBack();
-                Log::error('Erro ao buscar professor', [
+                Log::error('Failed to find teacher', [
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['success' => false, 'message' => 'Erro ao buscar professor'], 500);
+                return response()->json(['success' => false, 'message' => 'Failed to find teacher'], 500);
             }
 
             $teacher->rating = $this->commentRepository->findAverageByTeacherId($teacher->id);
@@ -70,7 +70,7 @@ class CommentService
             return response()->json(['success' => true, 'data' => $comment], 201);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Erro ao salvar comentário', [
+            Log::error('Failed to save comment', [
                 'message' => $e->getMessage(),
                 'line' => $e->getLine(),
                 'file' => $e->getFile(),
@@ -101,20 +101,20 @@ class CommentService
 
             if (!$comment) {
                 DB::rollBack();
-                Log::error('Erro ao encontrar comentário', [
+                Log::error('Failed to find comment', [
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['success' => false, 'message' => 'Erro ao buscar comentário'], 500);
+                return response()->json(['success' => false, 'message' => 'Failed to find comment'], 500);
             }
 
             if ($comment->user_account_id !== Auth::user()->id) {
                 DB::rollBack();
-                Log::error('Usuário não autorizado a atualizar comentário', [
+                Log::error('User cannot update this comment', [
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['success' => false, 'message' => 'Usuário não autorizado a atualizar comentário'], 401);
+                return response()->json(['success' => false, 'message' => 'User cannot update this comment'], 401);
             }
 
             $comment->content = $validData['content'];
@@ -126,11 +126,11 @@ class CommentService
 
             if (!$teacher) {
                 DB::rollBack();
-                Log::error('Erro ao buscar professor', [
+                Log::error('Failed to find teacher', [
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['success' => false, 'message' => 'Erro ao buscar professor'], 500);
+                return response()->json(['success' => false, 'message' => 'Failed to find teacher'], 500);
             }
 
             $teacher->rating = $this->commentRepository->findAverageByTeacherId($teacher->id);
@@ -142,7 +142,7 @@ class CommentService
             return response()->json(['success' => true, 'data' => $comment], 201);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Erro ao atualizar comentário', [
+            Log::error('Failed to update comment', [
                 'message' => $e->getMessage(),
                 'line' => $e->getLine(),
                 'file' => $e->getFile(),
@@ -162,20 +162,20 @@ class CommentService
 
             if (!$comment) {
                 DB::rollBack();
-                Log::error('Erro ao encontrar comentário', [
+                Log::error('Failed to find comment', [
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['success' => false, 'message' => 'Erro ao buscar comentário'], 500);
+                return response()->json(['success' => false, 'message' => 'Failed to find comment'], 500);
             }
 
             if ($comment->user_account_id !== Auth::user()->id) {
                 DB::rollBack();
-                Log::error('Usuário não autorizado a deletar comentário', [
+                Log::error('User cannot delete this comment', [
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['success' => false, 'message' => 'Usuário não autorizado a deletar comentário'], 401);
+                return response()->json(['success' => false, 'message' => 'User cannot delete this comment'], 401);
             }
 
             $this->commentRepository->delete($commentId);
@@ -184,11 +184,11 @@ class CommentService
 
             if (!$teacher) {
                 DB::rollBack();
-                Log::error('Erro ao buscar professor', [
+                Log::error('Failed to find teacher', [
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['success' => false, 'message' => 'Erro ao buscar professor'], 500);
+                return response()->json(['success' => false, 'message' => 'Failed to find teacher'], 500);
             }
 
             $teacher->rating = $this->commentRepository->findAverageByTeacherId($teacher->id) ?? 0;
@@ -200,11 +200,11 @@ class CommentService
 
             return response()->json([
                 'success' => true,
-                'message' => 'Comentário deletado com sucesso',
+                'message' => 'Comment deleted successfully',
             ], 201);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Erro ao deletar comentário', [
+            Log::error('Failed to delete comment', [
                 'message' => $e->getMessage(),
                 'line' => $e->getLine(),
                 'file' => $e->getFile(),

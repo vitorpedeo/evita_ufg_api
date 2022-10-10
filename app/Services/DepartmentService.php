@@ -20,13 +20,13 @@ class DepartmentService
         try {
             $departments = $this->repository->findAll();
 
-            Log::info('Busca bem sucedida pelos departamentos', [
+            Log::info('Successfully found departments', [
                 'user' => Auth::user(),
             ]);
 
             return response()->json(['success' => true, 'data' => $departments], 200);
         } catch (\Exception $e) {
-            Log::error('Erro ao buscar todos os departamentos', [
+            Log::error('Failed to find departments', [
                 'message' => $e->getMessage(),
                 'line' => $e->getLine(),
                 'file' => $e->getFile(),
