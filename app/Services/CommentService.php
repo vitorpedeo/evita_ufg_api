@@ -29,7 +29,19 @@ class CommentService
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'message' => $validator->errors()], 400);
+            if ($validator->errors()->has('content')) {
+                return response()->json(['success' => false, 'message' => 'Informe o conteúdo do comentário!'], 400);
+            }
+
+            if ($validator->errors()->has('rating')) {
+                return response()->json(['success' => false, 'message' => 'Informe a nota do professor!'], 400);
+            }
+
+            if ($validator->errors()->has('teacher_id')) {
+                return response()->json(['success' => false, 'message' => 'Informe o professor a ser avaliado!'], 400);
+            }
+
+            return response()->json(['success' => false, 'message' => 'Dados inválidos!'], 400);
         }
 
         try {
@@ -46,7 +58,7 @@ class CommentService
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['success' => false, 'message' => 'Failed to save comment'], 500);
+                return response()->json(['success' => false, 'message' => 'Falha ao salvar o comentário.'], 500);
             }
 
             $teacher = $this->teacherRepository->findById($validData['teacher_id']);
@@ -57,7 +69,7 @@ class CommentService
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['success' => false, 'message' => 'Failed to find teacher'], 500);
+                return response()->json(['success' => false, 'message' => 'Falha ao encontrar o professor.'], 500);
             }
 
             $teacher->rating = $this->commentRepository->findAverageByTeacherId($teacher->id);
@@ -77,7 +89,7 @@ class CommentService
                 'user' => Auth::user(),
             ]);
 
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => 'Não foi possível salvar o comentário no momento.'], 500);
         }
     }
 
@@ -89,7 +101,15 @@ class CommentService
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'message' => $validator->errors()], 400);
+            if ($validator->errors()->has('content')) {
+                return response()->json(['success' => false, 'message' => 'Informe o conteúdo do comentário!'], 400);
+            }
+
+            if ($validator->errors()->has('rating')) {
+                return response()->json(['success' => false, 'message' => 'Informe a nota do professor!'], 400);
+            }
+
+            return response()->json(['success' => false, 'message' => 'Dados inválidos!'], 400);
         }
 
         try {
@@ -105,7 +125,7 @@ class CommentService
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['success' => false, 'message' => 'Failed to find comment'], 500);
+                return response()->json(['success' => false, 'message' => 'Falha ao encontrar o comentário.'], 500);
             }
 
             if ($comment->user_account_id !== Auth::user()->id) {
@@ -114,7 +134,7 @@ class CommentService
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['success' => false, 'message' => 'User cannot update this comment'], 401);
+                return response()->json(['success' => false, 'message' => 'Você não pode atualizar esse comentário.'], 401);
             }
 
             $comment->content = $validData['content'];
@@ -130,7 +150,7 @@ class CommentService
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['success' => false, 'message' => 'Failed to find teacher'], 500);
+                return response()->json(['success' => false, 'message' => 'Falha ao encontrar o professor.'], 500);
             }
 
             $teacher->rating = $this->commentRepository->findAverageByTeacherId($teacher->id);
@@ -149,7 +169,7 @@ class CommentService
                 'user' => Auth::user(),
             ]);
 
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => 'Não foi possível atualizar o comentário no momento.'], 500);
         }
     }
 
@@ -166,7 +186,7 @@ class CommentService
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['success' => false, 'message' => 'Failed to find comment'], 500);
+                return response()->json(['success' => false, 'message' => 'Falha ao encontrar o comentário.'], 500);
             }
 
             if ($comment->user_account_id !== Auth::user()->id) {
@@ -175,7 +195,7 @@ class CommentService
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['success' => false, 'message' => 'User cannot delete this comment'], 401);
+                return response()->json(['success' => false, 'message' => 'Você não pode deletar esse comentário.'], 401);
             }
 
             $this->commentRepository->delete($commentId);
@@ -188,7 +208,7 @@ class CommentService
                     'user' => Auth::user(),
                 ]);
 
-                return response()->json(['success' => false, 'message' => 'Failed to find teacher'], 500);
+                return response()->json(['success' => false, 'message' => 'Falha ao encontrar o professor.'], 500);
             }
 
             $teacher->rating = $this->commentRepository->findAverageByTeacherId($teacher->id) ?? 0;
@@ -200,7 +220,7 @@ class CommentService
 
             return response()->json([
                 'success' => true,
-                'message' => 'Comment deleted successfully',
+                'message' => 'Comentário deletado com sucesso!',
             ], 201);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -211,7 +231,7 @@ class CommentService
                 'user' => Auth::user(),
             ]);
 
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => 'Não foi possível deletar o comentário no momento.'], 500);
         }
     }
 }

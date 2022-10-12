@@ -26,7 +26,19 @@ class UserAccountService
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'message' => $validator->errors()], 400);
+            if ($validator->errors()->has('name')) {
+                return response()->json(['success' => false, 'message' => 'Informe um nome válido!'], 400);
+            }
+
+            if ($validator->errors()->has('email')) {
+                return response()->json(['success' => false, 'message' => 'Informe um email válido!'], 400);
+            }
+
+            if ($validator->errors()->has('password')) {
+                return response()->json(['success' => false, 'message' => 'Informe uma senha válida!'], 400);
+            }
+
+            return response()->json(['success' => false, 'message' => 'Dados inválidos!'], 400);
         }
 
         try {
@@ -43,7 +55,7 @@ class UserAccountService
                 'file' => $e->getFile(),
             ]);
 
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => 'Não foi possível criar sua conta no momento.'], 500);
         }
     }
 
@@ -55,7 +67,15 @@ class UserAccountService
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'message' => $validator->errors()], 400);
+            if ($validator->errors()->has('email')) {
+                return response()->json(['success' => false, 'message' => 'Informe um email válido!'], 400);
+            }
+
+            if ($validator->errors()->has('password')) {
+                return response()->json(['success' => false, 'message' => 'Informe uma senha válida!'], 400);
+            }
+
+            return response()->json(['success' => false, 'message' => 'Dados inválidos!'], 400);
         }
 
         try {
@@ -64,11 +84,11 @@ class UserAccountService
             $userAccount = $this->repository->findByEmail($validData['email']);
 
             if (!$userAccount) {
-                return response()->json(['success' => false, 'message' => 'Invalid email/password'], 401);
+                return response()->json(['success' => false, 'message' => 'Email/senha inválidos!'], 401);
             }
 
             if (!Hash::check($validData['password'], $userAccount->password)) {
-                return response()->json(['success' => false, 'message' => 'Invalid email/password'], 401);
+                return response()->json(['success' => false, 'message' => 'Email/senha inválidos!'], 401);
             }
 
             return response()->json([
@@ -83,7 +103,7 @@ class UserAccountService
                 'file' => $e->getFile(),
             ]);
 
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => 'Não foi possível realizar o login no momento.'], 500);
         }
     }
 
@@ -93,11 +113,11 @@ class UserAccountService
 
         $currentUser->currentAccessToken()->delete();
 
-        return response()->json(['success' => true, 'message' => 'Successfully logout'], 200);
+        return response()->json(['success' => true, 'message' => 'Logout realizado com sucesso!'], 200);
     }
 
     public function invalidToken()
     {
-        return response()->json(['success' => false, 'message' => 'Invalid token'], 401);
+        return response()->json(['success' => false, 'message' => 'Token inválido!'], 401);
     }
 }

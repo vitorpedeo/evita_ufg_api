@@ -33,7 +33,7 @@ class DepartmentService
                 'user' => Auth::user(),
             ]);
 
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => 'Não foi possível encontrar os departamentos no momento.'], 500);
         }
     }
 }

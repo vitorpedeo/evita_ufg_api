@@ -23,7 +23,7 @@ class TeacherService
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'message' => 'Teacher not found'], 404);
+            return response()->json(['success' => false, 'message' => 'Professor não encontrado.'], 404);
         }
 
         try {
@@ -44,7 +44,7 @@ class TeacherService
                 'teacher' => $teacher,
             ]);
 
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => 'Não foi possível encontrar o professor no momento.'], 500);
         }
     }
 
@@ -55,7 +55,7 @@ class TeacherService
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'message' => 'Invalid department'], 400);
+            return response()->json(['success' => false, 'message' => 'Departamento inválido.'], 400);
         }
 
         try {
@@ -76,7 +76,7 @@ class TeacherService
                 'department' => $departmentId,
             ]);
 
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => 'Não foi possível encontrar os professores no momento.'], 500);
         }
     }
 }
