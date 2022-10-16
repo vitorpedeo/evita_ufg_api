@@ -51,7 +51,7 @@ class TeacherService
     public function getByDepartmentId(int $departmentId)
     {
         $validator = Validator::make(['departmentId' => $departmentId], [
-            'departmentId' => 'required|integer|exists:teacher,department_id'
+            'departmentId' => 'required|integer'
         ]);
 
         if ($validator->fails()) {
