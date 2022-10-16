@@ -28,11 +28,11 @@ Route::get('/login', [UserAccountController::class, 'invalidToken'])->name('logi
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('department')->group(function () {
         Route::get('/', [DepartmentController::class, 'getAll'])->name('department.getAll');
+        Route::get('/{id}/teacher', [TeacherController::class, 'getByDepartmentId'])->name('teacher.getByDepartmentId');
     });
 
     Route::prefix('teacher')->group(function () {
         Route::get('/{id}', [TeacherController::class, 'getById'])->name('teacher.getById');
-        Route::get('/department/{id}', [TeacherController::class, 'getByDepartmentId'])->name('teacher.getByDepartmentId');
     });
 
     Route::prefix('comment')->group(function () {
