@@ -15,6 +15,6 @@ class DepartmentRepository
 
     public function findAll()
     {
-        return $this->model->all();
+        return $this->model->orderBy('name', 'asc')->get();
     }
 }

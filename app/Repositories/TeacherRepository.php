@@ -20,6 +20,6 @@ class TeacherRepository
 
     public function findByDepartmentId(int $departmentId)
     {
-        return $this->model->where('department_id', $departmentId)->get();
+        return $this->model->where('department_id', $departmentId)->orderBy('name', 'asc')->get();
     }
 }
