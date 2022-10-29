@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('teacher', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('image_url')->nullable();
             $table->string('email')->nullable();
             $table->decimal('rating')->default(0);
             $table->integer('evaluations')->default(0);
