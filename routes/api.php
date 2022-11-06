@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('auth')->group(function() {
     Route::post('/register', [UserAccountController::class, 'register'])->name('auth.register');
     Route::post('/login', [UserAccountController::class, 'login'])->name('auth.login');
+    Route::post('/google-login', [UserAccountController::class, 'googleLogin'])->name('auth.googleLogin');
 });
 
 /* Rota para lidar com os erros causados pelos tokens inválidos */

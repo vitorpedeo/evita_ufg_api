@@ -33,6 +33,16 @@ class UserAccountController extends Controller
         ]);
     }
 
+    public function googleLogin(Request $request)
+    {
+        return $this->service->googleLogin([
+            'id' => $request->input('id'),
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'avatar_url' => $request->input('avatar_url'),
+        ]);
+    }
+
     public function logout()
     {
         return $this->service->logout();

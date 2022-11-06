@@ -12,6 +12,7 @@ class UserAccount extends Authenticatable
     protected $table = 'user_account';
 
     protected $fillable = [
+        'id',
         'name',
         'avatar_url',
         'email',

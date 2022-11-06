@@ -13,6 +13,11 @@ class UserAccountRepository
         $this->model = $model;
     }
 
+    public function findById(int $id)
+    {
+        return $this->model->where('id', $id)->first();
+    }
+
     public function findByEmail(string $email)
     {
         return $this->model->where('email', $email)->first();

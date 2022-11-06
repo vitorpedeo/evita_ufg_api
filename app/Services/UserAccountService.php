@@ -107,6 +107,62 @@ class UserAccountService
         }
     }
 
+    public function googleLogin($data)
+    {
+        $validator = Validator::make($data, [
+            'id' => 'required|string',
+            'name' => 'required|string',
+            'email' => 'required|string|email',
+            'avatar_url' => 'string|nullable',
+        ]);
+
+        if ($validator->fails()) {
+            if ($validator->errors()->has('id')) {
+                return response()->json(['success' => false, 'message' => 'Informe o id da conta Google!'], 400);
+            }
+
+            if ($validator->errors()->has('name')) {
+                return response()->json(['success' => false, 'message' => 'Informe o nome da conta Google!'], 400);
+            }
+
+            if ($validator->errors()->has('email')) {
+                return response()->json(['success' => false, 'message' => 'Informe o email da conta Google!'], 400);
+            }
+
+            return response()->json(['success' => false, 'message' => 'Dados inválidos!'], 400);
+        }
+
+        try {
+            $validData = $validator->validated();
+
+            $userAccount = $this->repository->findById(intval($validData['id']));
+
+            if (!$userAccount) {
+                $userAccount = $this->repository->create([
+                    'id' => intval($validData['id']),
+                    'name' => $validData['name'],
+                    'avatar_url' => $validData['avatar_url'],
+                    'email' => $validData['email'],
+                    'password' => Hash::make($validData['email']),
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $userAccount,
+                'token' => $userAccount->createToken('auth_token')->plainTextToken,
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error('Failed to login', [
+                'message' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+            ]);
+
+            return response()->json(['success' => false, 'message' => 'Não foi possível realizar o login no momento.'], 500);
+        }
+    }
+
     public function logout()
     {
         $currentUser = Auth::user();
