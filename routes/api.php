@@ -23,7 +23,7 @@ Route::prefix('auth')->group(function() {
     Route::post('/google-login', [UserAccountController::class, 'googleLogin'])->name('auth.googleLogin');
 });
 
-/* Rota para lidar com os erros causados pelos tokens inválidos */
+/* Route to catch errors caused by invalid tokens */
 Route::get('/login', [UserAccountController::class, 'invalidToken'])->name('login');
 
 Route::middleware('auth:sanctum')->group(function () {
